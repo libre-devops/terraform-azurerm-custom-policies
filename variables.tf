@@ -16,7 +16,7 @@ variable "add_resource_lock_to_nsg_policy" {
 variable "allowed_resources_policy" {
   description = "Configuration for the list of resource providers which can be deployed"
   type = object({
-    name                          = optional(string, "approved-resources-providers")
+    name                          = optional(string, "allowed-resources-providers")
     additional_resource_providers = optional(list(string), [])
     approved_resources = optional(list(string), [
       "microsoft.advisor",
