@@ -52,6 +52,7 @@ resource "azurerm_policy_definition" "match_mandatory_resource_tagging_policy" {
 }
 
 resource "azurerm_management_group_policy_assignment" "match_mandatory_resource_tagging" {
+  count                = var.match_mandatory_resource_tagging_policy.deploy_assignment ? 1 : 0
   name                 = azurerm_policy_definition.match_mandatory_resource_tagging_policy.name
   management_group_id  = var.match_mandatory_resource_tagging_policy.management_group_id != null ? var.match_mandatory_resource_tagging_policy.management_group_id : (var.attempt_read_tenant_root_group ? data.azurerm_management_group.tenant_root_group[0].id : null)
   policy_definition_id = azurerm_policy_definition.match_mandatory_resource_tagging_policy.id

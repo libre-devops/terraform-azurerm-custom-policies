@@ -2,7 +2,8 @@ locals {
   like_mandatory_resource_tag_name_prefix = var.like_mandatory_resource_tagging_policy.name
   like_mandatory_resource_tag_name_hash   = substr(md5(local.like_mandatory_resource_tag_name_prefix), 0, 4)
 
-  like_mandatory_non_compliance_messages = [for tag in var.like_mandatory_resource_tagging_policy.required_tags :
+  like_mandatory_non_compliance_messages = [
+    for tag in var.like_mandatory_resource_tagging_policy.required_tags :
     format("${var.policy_error_prefix} The resource you have tried to deploy is restricted by mandatory like-pattern tagging policy. %s does is not like the pattern. Please ensure all mandatory tags are provided. Contact your administrator for assistance.", tag.key)
   ]
 
@@ -10,12 +11,14 @@ locals {
 
   like_mandatory_policy_rule = {
     "if" = {
-      "allOf" = [for tag in var.like_mandatory_resource_tagging_policy.required_tags : {
-        not = {
-          "field" = "tags['${tag.key}']",
-          "like"  = tag.pattern
+      "allOf" = [
+        for tag in var.like_mandatory_resource_tagging_policy.required_tags : {
+          not = {
+            "field" = "tags['${tag.key}']",
+            "like"  = tag.pattern
+          }
         }
-      }]
+      ]
     },
     "then" = {
       "effect" = "[parameters('effect')]"
@@ -52,6 +55,7 @@ resource "azurerm_policy_definition" "like_mandatory_resource_tagging_policy" {
 }
 
 resource "azurerm_management_group_policy_assignment" "like_mandatory_resource_tagging" {
+  count                = var.like_mandatory_resource_tagging_policy.deploy_assignment ? 1 : 0
   name                 = azurerm_policy_definition.like_mandatory_resource_tagging_policy.name
   management_group_id  = var.like_mandatory_resource_tagging_policy.management_group_id != null ? var.like_mandatory_resource_tagging_policy.management_group_id : (var.attempt_read_tenant_root_group ? data.azurerm_management_group.tenant_root_group[0].id : null)
   policy_definition_id = azurerm_policy_definition.like_mandatory_resource_tagging_policy.id

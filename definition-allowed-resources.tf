@@ -18,6 +18,7 @@ data "azurerm_policy_definition_built_in" "allowed_resource_types" {
 }
 
 resource "azurerm_management_group_policy_assignment" "approved_services_actions_assignment" {
+  count                = var.allowed_resources_policy.deploy_assignment ? 1 : 0
   name                 = local.approved_resources_policy_approved_services_actions_name_hash
   policy_definition_id = data.azurerm_policy_definition_built_in.allowed_resource_types.id
   management_group_id  = var.allowed_resources_policy.management_group_id != null ? var.allowed_resources_policy.management_group_id : (var.attempt_read_tenant_root_group ? data.azurerm_management_group.tenant_root_group[0].id : null)
