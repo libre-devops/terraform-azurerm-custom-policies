@@ -1,5 +1,6 @@
 {
   "displayName": "Deploy Diagnostic Settings for Subscription Activity Logs to Log Analytics Workspace and Storage Account",
+  "description": "Deploys the diagnostic settings for a Subscription to capture Activity Logs and stream them to a regional Log Analytics workspace and a Storage Account when any Subscription which is missing these diagnostic settings is created or updated.",
   "policyRule": {
     "if": {
       "field": "type",
@@ -83,10 +84,6 @@
                       {
                         "category": "ResourceHealth",
                         "enabled": true
-                      },
-                      {
-                        "category": "Audit",
-                        "enabled": true
                       }
                     ]
                   }
@@ -112,7 +109,6 @@
       }
     }
   },
-  "description": "Deploys the diagnostic settings for a Subscription to capture Activity Logs and stream them to a regional Log Analytics workspace and a Storage Account when any Subscription which is missing these diagnostic settings is created or updated.",
   "policyType": "Custom",
   "parameters": {
     "effect": {

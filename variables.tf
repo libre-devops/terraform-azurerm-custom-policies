@@ -116,7 +116,7 @@ variable "allowed_resources_policy" {
     enforce                        = optional(bool, true)
     non_compliance_message         = optional(string)
     description                    = optional(string)
-    effect                         = optional(string, "Deny")
+    effect                         = optional(string, "Audit")
     management_group_ids_to_exempt = optional(list(string), [])
   })
 }
@@ -124,7 +124,7 @@ variable "allowed_resources_policy" {
 variable "append_default_deny_nsg_rule_policy" {
   description = "Configuration for append deny NSG rule deployment policy"
   type = object({
-    name                         = optional(string, "append-nsg-default-deny1")
+    name                         = optional(string, "append-nsg-default-deny")
     deploy_assignment            = optional(bool, true)
     nsg_rule_name                = optional(string, "DenyAnyInbound")
     management_group_id          = optional(string)
@@ -210,6 +210,19 @@ variable "non_privileged_role_restriction_policy" {
     non_privileged_role_definition_restricted_principal_types = optional(list(string), ["User", "Group"])
   })
 }
+
+#variable "deploy_azure_activity_diagnostics_to_subscriptions_policy" {
+#  description = "Configuration for the non privileged role restriction policy, this policy allows you to restrict specific role definition IDs to specific principal types, in the event you would like users to have different access to other things like Managed Identities (normally used in automation)"
+#  type = object({
+#    name                                                      = optional(string, "deploy-az-act-diag")
+#    management_group_id                                       = optional(string)
+#    deploy_assignment                                         = optional(bool, true)
+#    enforce                                                   = optional(bool, true)
+#    non_compliance_message                                    = optional(string)
+#    description                                               = optional(string)
+#    effect                                                    = optional(string, "AuditIfNotExists")
+#  })
+#}
 
 variable "policy_error_prefix" {
   type        = string
